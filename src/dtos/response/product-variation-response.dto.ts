@@ -1,15 +1,17 @@
 import { Expose } from 'class-transformer';
 
 export class ProductVariationResponseDto {
-
   @Expose()
   id: string;
+
+  @Expose()
+  companyId: string;
 
   @Expose()
   name: string | null;
 
   @Expose()
-  price?: string | null ;
+  price?: string | null;
 
   @Expose()
   stock?: number | null;
@@ -37,5 +39,4 @@ export class ProductVariationResponseDto {
 
   @Expose()
   updatedAt: Date;
-
 }

@@ -26,6 +26,9 @@ export class ProductEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
+  @Column({ nullable: true })
+  companyId: string;
+
   @Index()
   @Column({
     length: 180,

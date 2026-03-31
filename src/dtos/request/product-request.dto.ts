@@ -22,6 +22,10 @@ export class ProductRequestDto {
   @IsNotEmpty({ message: 'Campo nome vazio' })
   name: string;
 
+  @IsString()
+  @IsNotEmpty({ message: 'Campo companyId vazio' })
+  companyId: string;
+
   @IsOptional()
   @IsString()
   description?: string;
@@ -37,7 +41,8 @@ export class ProductRequestDto {
   @Type(() => Number)
   @IsNumber({}, { message: 'Preço deve ser número' })
   @Min(0, { message: 'Preço não pode ser negativo' })
-  price: number | null;
+  @IsOptional()
+  price?: number | null;
 
   @IsOptional()
   @IsString()

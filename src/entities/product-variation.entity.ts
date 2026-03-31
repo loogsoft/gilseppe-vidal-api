@@ -19,6 +19,9 @@ export class ProductVariationEntity {
   @Column({ length: 120 })
   name: string;
 
+  @Column({ nullable: true })
+  companyId: string;
+
   @Column({ type: 'numeric', precision: 12, scale: 2, nullable: true })
   price?: number | null;
 

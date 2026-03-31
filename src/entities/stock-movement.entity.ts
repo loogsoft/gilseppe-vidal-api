@@ -23,6 +23,9 @@ export class StockMovementEntity {
   @Column()
   quantity: number;
 
+  @Column({nullable: false})
+  companyId: string;
+
   @Column({ nullable: true })
   productName: string;
 

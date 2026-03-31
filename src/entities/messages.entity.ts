@@ -1,4 +1,9 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
+} from 'typeorm';
 
 @Entity('message')
 export class MessageEntity {
@@ -7,6 +12,9 @@ export class MessageEntity {
 
   @Column({ nullable: false })
   productId: string;
+
+  @Column()
+  companyId: string;
 
   @Column({ nullable: false })
   name: string;

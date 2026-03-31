@@ -49,9 +49,9 @@ export class UsersController {
     return req.user;
   }
 
-  @Get()
-  findAll(): Promise<UserResponseDto[]> {
-    return this.usersService.findAll();
+  @Get('find-all/:companyId')
+  findAll(@Param('companyId') companyId: string): Promise<UserResponseDto[]> {
+    return this.usersService.findAll(companyId);
   }
 
   @Get(':id')
@@ -62,7 +62,7 @@ export class UsersController {
   @Put(':id')
   update(
     @Param('id') id: string,
-    @Body() dto: UserRequestDto,
+    @Body() dto: Partial<UserRequestDto>,
   ): Promise<UserResponseDto> {
     return this.usersService.update(id, dto);
   }
@@ -71,5 +71,4 @@ export class UsersController {
   remove(@Param('id') id: string) {
     return this.usersService.remove(id);
   }
-
 }

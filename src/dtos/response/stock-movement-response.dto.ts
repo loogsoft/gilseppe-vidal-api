@@ -14,6 +14,9 @@ export class StockMovementResponseDto {
   quantity: number;
 
   @Expose()
+  companyId: string;
+
+  @Expose()
   productName: string;
 
   @Expose()

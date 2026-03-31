@@ -70,11 +70,11 @@ export class UserService {
     }
   }
 
-  async findAll(): Promise<UserResponseDto[]> {
+  async findAll(companyId: string): Promise<UserResponseDto[]> {
     this.logger.log('findAll:start');
 
     try {
-      const users = await this.repo.find();
+      const users = await this.repo.find({ where: { companyId } });
       const result = plainToInstance(UserResponseDto, users);
 
       this.logger.log(
@@ -107,7 +107,10 @@ export class UserService {
       throw err;
     }
   }
-  async update(id: string, dto: UserRequestDto): Promise<UserResponseDto> {
+  async update(
+    id: string,
+    dto: Partial<UserRequestDto>,
+  ): Promise<UserResponseDto> {
     this.logger.log(`update:start ${toLogString({ id, dto })}`);
 
     try {

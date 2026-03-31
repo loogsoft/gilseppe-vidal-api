@@ -5,6 +5,10 @@ export class MessageRequestDto {
   @IsNotEmpty()
   productId: string;
 
+  @IsNotEmpty()
+  @IsString()
+  companyId: string;
+
   @IsString()
   @IsNotEmpty()
   name: string;

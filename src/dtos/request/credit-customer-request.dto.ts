@@ -1,10 +1,20 @@
-import { Type } from 'class-transformer';
-import { IsDate, IsEmail, IsNotEmpty, IsNumber, IsOptional, IsString, IsUUID, Length, Matches } from 'class-validator';
+import {
+  IsEmail,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+  Matches,
+} from 'class-validator';
 
 export class CreditCustomerRequestDto {
   @IsString()
   @IsNotEmpty()
   customerName: string;
+
+  @IsString()
+  @IsNotEmpty()
+  companyId: string;
 
   @IsEmail()
   @IsNotEmpty()
@@ -46,9 +56,4 @@ export class CreditCustomerRequestDto {
   @IsOptional()
   @IsNumber()
   totalAmounts?: number;
-
-  @Type(() => Date)
-  @IsDate()
-  @IsNotEmpty()
-  date: Date;
 }

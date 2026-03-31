@@ -1,10 +1,17 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
+} from 'typeorm';
 
 @Entity('credit-customer')
 export class CreditCustomerEntity {
   // ID único da venda no crediário
   @PrimaryGeneratedColumn()
   id: string;
+  @Column({ nullable: false })
+  companyId: string;
 
   // Nome do cliente
   @Column({ nullable: false })
@@ -51,6 +58,6 @@ export class CreditCustomerEntity {
   totalAmounts: number;
 
   // Data da venda
-  @Column()
+  @CreateDateColumn({ type: 'timestamp' })
   date: Date;
 }

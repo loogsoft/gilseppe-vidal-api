@@ -32,10 +32,10 @@ export class StockMovementService {
       const productName = dto.productName;
 
       try {
-        product = await this.productsService.findOne(id);
+        product = await this.productsService.findOne(id, dto.companyId);
       } catch {
         variation = await this.variationRepo.findOne({
-          where: { id },
+          where: { id, ...(dto.companyId && { companyId: dto.companyId }) },
           relations: ['product'],
         });
       }
@@ -46,7 +46,11 @@ export class StockMovementService {
 
       const { variationId, productName: _productName, ...rest } = dto;
 
-      const movement = this.repo.create({ ...rest, variation: variation ?? undefined, productName });
+      const movement = this.repo.create({
+        ...rest,
+        variation: variation ?? undefined,
+        productName,
+      });
       const saved = await this.repo.save(movement);
 
       if (variation) {
@@ -58,34 +62,30 @@ export class StockMovementService {
           }
           await this.variationRepo.save(variation);
         }
-        await this.productsService.updateStock(
-          variation.product.id,
-          dto.quantity,
-          dto.type,
-        );
+        // Não chama updateStock do produto principal para variação
       } else if (product) {
-        await this.productsService.updateStock(
-          id,
-          dto.quantity,
-          dto.type,
-        );
+        await this.productsService.updateStock(id, dto.quantity, dto.type);
       }
 
       this.logger.log(`create:success ${toLogString({ id: saved.id })}`);
 
       return saved;
     } catch (err) {
-      const errorStack = err instanceof Error ? err.stack : String(err);
-      this.logger.error('create:error', errorStack);
+      this.logger.error('create:error', err);
+      if (err instanceof Error) {
+        this.logger.error('create:error:message', err.message);
+        this.logger.error('create:error:stack', err.stack);
+      }
+      this.logger.error('create:error:dto', JSON.stringify(dto));
       throw err;
     }
   }
 
-  async findAll() {
+  async findAll(companyId: string) {
     this.logger.log('findAll:start');
 
     try {
-      const movements = await this.repo.find({ relations: ['variation'] });
+      const movements = await this.repo.find({ where: { companyId }, relations: ['variation'] });
 
       this.logger.log(
         `findAll:success ${toLogString({ count: movements.length })}`,

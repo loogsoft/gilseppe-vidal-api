@@ -7,14 +7,18 @@ import {
   MaxLength,
   Min,
   IsUrl,
+  IsNotEmpty,
 } from 'class-validator';
 
 export class ProductVariationRequestDto {
-
   @IsOptional()
   @IsString()
   @MaxLength(100)
   name?: string;
+
+  @IsString()
+  @IsNotEmpty({ message: 'Campo companyId vazio' })
+  companyId: string;
 
   @IsOptional()
   @IsNumber()
@@ -49,5 +53,4 @@ export class ProductVariationRequestDto {
   @IsOptional()
   @IsString()
   imageUrl?: string;
-
 }

@@ -1,5 +1,10 @@
 import { UserTypeEnum } from 'src/dtos/enums/user-type.enum';
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
+} from 'typeorm';
 @Entity('user')
 export class UserEntity {
   @PrimaryGeneratedColumn()
@@ -7,7 +12,7 @@ export class UserEntity {
 
   @Column({ nullable: true })
   companyId: string;
-  
+
   @Column({ nullable: false })
   name: string;
 
@@ -29,4 +34,7 @@ export class UserEntity {
 
   @Column({ type: 'timestamp', nullable: true })
   codeExpiresAt: Date | null;
+
+  @CreateDateColumn({ type: 'timestamp' })
+  dataCadastro: Date;
 }

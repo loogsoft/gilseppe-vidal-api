@@ -19,6 +19,7 @@ import { ImageService } from 'src/services/image.service';
 import { toLogString } from 'src/utils/logging';
 
 import { StockMovementType } from 'src/entities/stock-movement.entity';
+import { ProductStatusEnum } from 'src/dtos/enums/product-status.enum';
 
 @Injectable()
 export class ProductsService {
@@ -79,6 +80,7 @@ export class ProductsService {
               imageUrl,
               isActive: v.isActive ?? true,
               activeLowStock: v.activeLowStock,
+              companyId: v.companyId,
             });
           }),
         );
@@ -93,6 +95,7 @@ export class ProductsService {
         variations: variationEntities,
         color: dto.color ?? undefined,
         size: dto.size ?? undefined,
+        companyId: dto.companyId,
       });
 
       const savedProduct = await this.repo.save(product);
@@ -111,8 +114,9 @@ export class ProductsService {
     }
   }
 
-  async findAll() {
+  async findAll(companyId: string) {
     return await this.repo.find({
+      where: { companyId },
       relations: {
         images: true,
         supplier: true,
@@ -125,9 +129,9 @@ export class ProductsService {
     });
   }
 
-  async findOne(id: string) {
+  async findOne(id: string, companyId?: string) {
     const product = await this.repo.findOne({
-      where: { id },
+      where: { id, ...(companyId && { companyId }) },
 
       relations: {
         images: true,
@@ -226,6 +230,7 @@ export class ProductsService {
             imageUrl: imageUrl ?? existing?.imageUrl,
             isActive: v.isActive ?? true,
             activeLowStock: v.activeLowStock,
+            companyId: v.companyId,
           });
         }),
       );
@@ -255,6 +260,9 @@ export class ProductsService {
           product.stock += quantity;
         } else {
           product.stock -= quantity;
+          if (product.stock <= 0) {
+            product.status = ProductStatusEnum.DISABLED;
+          }
         }
         await this.repo.save(product);
         this.logger.log(

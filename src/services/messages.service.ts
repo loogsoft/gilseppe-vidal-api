@@ -1,15 +1,9 @@
-import {
-  Injectable,
-  Logger,
-  NotFoundException,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MessageRequestDto } from 'src/dtos/request/message-request.dto';
 import { MessageResponseDto } from 'src/dtos/response/message-response.dto';
 import { plainToInstance } from 'class-transformer';
-import * as bcrypt from 'bcrypt';
 import { toLogString } from 'src/utils/logging';
 import { MessageEntity } from 'src/entities/messages.entity';
 
@@ -22,14 +16,16 @@ export class MessagesService {
     private repo: Repository<MessageEntity>,
   ) {}
 
-
   async create(dto: MessageRequestDto): Promise<MessageResponseDto> {
     this.logger.log(`create:start ${toLogString({ dto })}`);
     try {
-      // Verifica se já existe mensagem para o mesmo productId
-      const exists = await this.repo.findOne({ where: { productId: dto.productId } });
+      const exists = await this.repo.findOne({
+        where: { productId: dto.productId },
+      });
       if (exists) {
-        return plainToInstance(MessageResponseDto, exists, { excludeExtraneousValues: true });
+        return plainToInstance(MessageResponseDto, exists, {
+          excludeExtraneousValues: true,
+        });
       }
       const message = this.repo.create({
         name: dto.name,
@@ -37,12 +33,15 @@ export class MessagesService {
         description: dto.description,
         type: dto.type,
         productId: dto.productId,
+        companyId: dto.companyId,
       });
       const saved = await this.repo.save(message);
       const result = plainToInstance(MessageResponseDto, saved, {
         excludeExtraneousValues: true,
       });
-      this.logger.log(`create:success ${toLogString({ productId: saved.productId })}`);
+      this.logger.log(
+        `create:success ${toLogString({ productId: saved.productId })}`,
+      );
       return result;
     } catch (err) {
       const errorStack = err instanceof Error ? err.stack : String(err);
@@ -51,14 +50,16 @@ export class MessagesService {
     }
   }
 
-  async findAll(): Promise<MessageResponseDto[]> {
+  async findAll(companyId: string): Promise<MessageResponseDto[]> {
     this.logger.log('findAll:start');
     try {
-      const messages = await this.repo.find();
+      const messages = await this.repo.find({ where: { companyId } });
       const result = plainToInstance(MessageResponseDto, messages, {
         excludeExtraneousValues: true,
       });
-      this.logger.log(`findAll:success ${toLogString({ count: messages.length })}`);
+      this.logger.log(
+        `findAll:success ${toLogString({ count: messages.length })}`,
+      );
       return result;
     } catch (err) {
       const errorStack = err instanceof Error ? err.stack : String(err);
@@ -67,10 +68,12 @@ export class MessagesService {
     }
   }
 
-  async findOne(id: string): Promise<MessageResponseDto> {
+  async findOne(companyId: string, id: string): Promise<MessageResponseDto> {
     this.logger.log(`findOne:start ${toLogString({ productId: id })}`);
     try {
-      const message = await this.repo.findOne({ where: { id: Number(id) } });
+      const message = await this.repo.findOne({
+        where: { id: Number(id), companyId },
+      });
       if (!message) {
         throw new NotFoundException('Mensagem não encontrada');
       }
@@ -85,10 +88,15 @@ export class MessagesService {
       throw err;
     }
   }
-  async update(id: string, dto: MessageRequestDto): Promise<MessageResponseDto> {
+  async update(
+    id: string,
+    dto: MessageRequestDto,
+  ): Promise<MessageResponseDto> {
     this.logger.log(`update:start ${toLogString({ productId: id, dto })}`);
     try {
-      const message = await this.repo.findOne({ where: { id: Number(id) } });
+      const message = await this.repo.findOne({
+        where: { id: Number(id), companyId: dto.companyId },
+      });
       if (!message) {
         throw new NotFoundException('Mensagem não encontrada');
       }
@@ -108,10 +116,12 @@ export class MessagesService {
     }
   }
 
-  async remove(id: string): Promise<string> {
+  async remove(id: string, companyId: string): Promise<string> {
     this.logger.log(`remove:start ${toLogString({ productId: id })}`);
     try {
-      const message = await this.repo.findOne({ where: { id: Number(id) } });
+      const message = await this.repo.findOne({
+        where: { id: Number(id), companyId },
+      });
       if (!message) {
         throw new NotFoundException('Mensagem não encontrada');
       }
@@ -124,6 +134,4 @@ export class MessagesService {
       throw err;
     }
   }
-
-  // Nenhuma lógica de usuário, email ou autenticação aqui. Service exclusivo para mensagens.
 }

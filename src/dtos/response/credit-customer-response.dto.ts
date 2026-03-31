@@ -6,6 +6,8 @@ export class CreditCustomerResponseDto {
   @Expose()
   customerName: string;
   @Expose()
+  companyId: string;
+  @Expose()
   customerEmail: string;
   @Expose()
   CPF: string;

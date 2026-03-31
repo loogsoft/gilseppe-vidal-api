@@ -18,9 +18,9 @@ export class EmailService {
 
     try {
       await this.resend.emails.send({
-        from: 'Giuseppe Vidal <onboarding@resend.dev>',
-        to: "loogsoftware@gmail.com",
-        subject: 'Código de verificação – Giuseppe Vidal',
+        from: 'Loog System <onboarding@resend.dev>',
+        to: 'loogsoftware@gmail.com',
+        subject: 'Código de verificação – Loog System',
         html: `
   <div style="
     font-family: Arial, Helvetica, sans-serif;
@@ -85,7 +85,7 @@ export class EmailService {
         color: #aaa;
         margin-top: 24px;
       ">
-        Giuseppe Vidal
+        Loog System
       </p>
     </div>
   </div>

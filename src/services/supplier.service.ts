@@ -59,11 +59,11 @@ export class SuppliersService {
       }
   }
 
-  async findAll() {
+  async findAll(companyId: string) {
     this.logger.log('findAll:start');
 
     try {
-      const suppliers = await this.repo.find({ relations: ['images'] });
+      const suppliers = await this.repo.find({ where: { companyId }, relations: ['images'] });
 
       this.logger.log(
         `findAll:success ${toLogString({ count: suppliers.length })}`,

@@ -15,6 +15,9 @@ export class SupplierEntity {
   id: string;
 
   @Column({ nullable: false })
+  companyId: string;
+
+  @Column({ nullable: false })
   name: string;
 
   @Column({ length: 120, nullable: true })
@@ -25,7 +28,7 @@ export class SupplierEntity {
     eager: true,
   })
   images?: ImageEntity[];
-  
+
   @Column({ nullable: true })
   email?: string;
 

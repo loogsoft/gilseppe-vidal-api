@@ -12,14 +12,17 @@ export class MessagesController {
     return this.messagesService.create(dto);
   }
 
-  @Get()
-  async findAll(): Promise<MessageResponseDto[]> {
-    return this.messagesService.findAll();
+  @Get('find-all/:companyId')
+  async findAll(@Param('companyId') companyId: string): Promise<MessageResponseDto[]> {
+    return this.messagesService.findAll(companyId);
   }
 
-  @Get(':id')
-  async findOne(@Param('id') id: string): Promise<MessageResponseDto> {
-    return this.messagesService.findOne(id);
+  @Get('companyId/:companyId/:id')
+  async findOne(
+    @Param('companyId') companyId: string,
+    @Param('id') id: string
+  ): Promise<MessageResponseDto> {
+    return this.messagesService.findOne(companyId, id);
   }
 
   @Put(':id')
@@ -27,8 +30,11 @@ export class MessagesController {
     return this.messagesService.update(id, dto);
   }
 
-  @Delete(':id')
-  async remove(@Param('id') id: string): Promise<string> {
-    return this.messagesService.remove(id);
+  @Delete('companyId/:companyId/:id')
+  async remove(
+    @Param('companyId') companyId: string,
+    @Param('id') id: string
+  ): Promise<string> {
+    return this.messagesService.remove(id, companyId);
   }
 }

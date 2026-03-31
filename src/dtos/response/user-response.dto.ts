@@ -16,4 +16,7 @@ export class UserResponseDto {
 
   @Expose()
   userType: UserTypeEnum;
+
+  @Expose()
+  dataCadastro: Date;
 }
