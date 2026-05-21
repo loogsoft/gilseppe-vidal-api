@@ -3,7 +3,9 @@ import {
   PrimaryGeneratedColumn,
   Column,
   CreateDateColumn,
+  OneToMany,
 } from 'typeorm';
+import { CreditSaleEntity } from './credit-sale.entity';
 
 @Entity('credit-customer')
 export class CreditCustomerEntity {
@@ -12,6 +14,11 @@ export class CreditCustomerEntity {
   id: string;
   @Column({ nullable: false })
   companyId: string;
+
+  @OneToMany(() => CreditSaleEntity, (creditSale) => creditSale.customer, {
+    nullable: true,
+  })
+  creditSales: CreditSaleEntity[];
 
   // Nome do cliente
   @Column({ nullable: false })

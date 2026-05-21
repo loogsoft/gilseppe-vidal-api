@@ -1,11 +1,28 @@
 import { Type } from 'class-transformer';
-import { IsArray, IsDate, IsEnum, IsNotEmpty, IsNumber, IsPositive, IsUUID, Min } from 'class-validator';
+import {
+  IsArray,
+  IsDate,
+  IsEnum,
+  IsNotEmpty,
+  IsNumber,
+  IsString,
+  IsUUID,
+  Min,
+} from 'class-validator';
 import { CreditSaleStatusEnum } from '../enums/credit-sale-status.enum';
 
 export class CreditSaleRequestDto {
   @IsNumber()
   @IsNotEmpty()
   totalAmount: number;
+
+  @IsString()
+  @IsNotEmpty()
+  customerId: string;
+
+  @IsString()
+  @IsNotEmpty()
+  companyId: string;
 
   @IsNumber()
   @Min(1)

@@ -1,15 +1,27 @@
 import { CreditSaleStatusEnum } from 'src/dtos/enums/credit-sale-status.enum';
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  OneToMany,
+  ManyToOne,
+} from 'typeorm';
 import { ProductEntity } from './product.entity';
+import { CreditCustomerEntity } from './credit-customer.entity';
 
 @Entity('credit-sale')
 export class CreditSaleEntity {
-  // ID único da venda no crediário
   @PrimaryGeneratedColumn()
   id: string;
 
+  @ManyToOne(() => CreditCustomerEntity, (customer) => customer.creditSales)
+  customer: CreditCustomerEntity;
+
+  @Column({ nullable: true })
+  companyId: string;
+
   // Valor total da compra
-  @Column({ nullable: false })
+  @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
   totalAmount: number;
 
   // Quantidade de parcelas

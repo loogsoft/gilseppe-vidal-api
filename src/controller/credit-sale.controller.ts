@@ -1,18 +1,19 @@
-import { Controller, Get, Post, Body } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param } from '@nestjs/common';
+import { CreditSaleRequestDto } from 'src/dtos/request/credit-sale-request.dto';
+import { CreditSaleResponseDto } from 'src/dtos/response/credit-sale-response.dto';
 import { CreditSaleService } from '../services/credit-sale.service';
-import { CreditSaleEntity } from '../entities/credit-sale.entity';
 
 @Controller('credit-sale')
 export class CreditSaleController {
   constructor(private readonly creditSaleService: CreditSaleService) {}
 
   @Post()
-  async create(@Body() dto: Partial<CreditSaleEntity>): Promise<CreditSaleEntity> {
+  async create(@Body() dto: CreditSaleRequestDto): Promise<CreditSaleResponseDto> {
     return await this.creditSaleService.create(dto);
   }
 
-  @Get()
-  async findAll(): Promise<CreditSaleEntity[]> {
-    return await this.creditSaleService.findAll();
+  @Get(':companyId')
+  async findAll(@Param('companyId') companyId: string): Promise<CreditSaleResponseDto[]> {
+    return await this.creditSaleService.findAll(companyId);
   }
 }

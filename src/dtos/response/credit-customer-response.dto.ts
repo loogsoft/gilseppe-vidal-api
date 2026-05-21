@@ -1,4 +1,6 @@
 import { Expose } from 'class-transformer';
+import { CreditSaleEntity } from 'src/entities/credit-sale.entity';
+import { CreditSaleResponseDto } from './credit-sale-response.dto';
 
 export class CreditCustomerResponseDto {
   @Expose()
@@ -9,6 +11,8 @@ export class CreditCustomerResponseDto {
   companyId: string;
   @Expose()
   customerEmail: string;
+  @Expose()
+  creditSales: CreditSaleResponseDto[];
   @Expose()
   CPF: string;
   @Expose()
