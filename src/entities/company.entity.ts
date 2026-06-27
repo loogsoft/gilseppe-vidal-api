@@ -38,7 +38,7 @@ export class CompanyEntity {
   date: Date;
 
   // Data da venda
-  @Column({ type: 'timestamp', nullable:true })
+  @Column({ type: 'timestamp', nullable: true })
   paymentDueDay: Date;
 
   @Column({
