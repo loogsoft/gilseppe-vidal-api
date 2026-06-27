@@ -1,6 +1,6 @@
 services:
   api:
-    # build: .
+    build: .
     image: andersonmendss/loogsystemapi:v1
     ports:
       - "3000:3000"
