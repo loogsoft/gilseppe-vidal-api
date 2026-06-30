@@ -24,7 +24,7 @@ import type { AuthenticatedRequest } from 'src/types/authenticated-request';
 export class UsersController {
   constructor(private readonly usersService: UserService) {}
 
-  @UseGuards(JwtAuthGuard)
+
   @Post()
   create(
     @Body() dto: UserRequestDto,
